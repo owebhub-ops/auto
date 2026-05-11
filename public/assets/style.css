@@ -1,0 +1,423 @@
+.hover-shadow {
+    transition: all 0.3s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+body {
+    font-size: 0.95rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.fs-6 {
+    font-size: 0.875rem;
+}
+
+
+/* ===== layout_inner – Mobile first, responsive lessons layout ===== */
+
+/* Base layout */
+.layout_inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333;
+    background: #f8f9fa;
+    margin-top: 20px;
+}
+
+/* Header / page header inside layout */
+.layout_inner__header {
+    background: #ffffff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 12px 1rem;
+}
+
+.layout_inner__header a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 0.95rem;
+}
+
+.layout_inner__header a:hover {
+    text-decoration: underline;
+}
+
+/* Main wrapper (left menu + content) */
+.layout_inner__main {
+    display: flex;
+    flex: 1;
+}
+
+/* Left inner menu */
+.layout_inner__left-menu {
+    width: 220px;
+    background: #ffffff;
+    border-right: 1px solid #e9ecef;
+    padding: 16px 12px;
+    overflow-y: auto;
+    max-height: calc(100vh - 50px);
+}
+
+.layout_inner__left-menu h3 {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.layout_inner__left-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.layout_inner__left-menu li {
+    margin-bottom: 4px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.layout_inner__left-menu a {
+    display: block;
+    padding: 8px 10px;
+    text-decoration: none;
+    color: #555;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.layout_inner__left-menu a:hover,
+.layout_inner__left-menu li.active a {
+    background: #007bff;
+    color: #ffffff;
+}
+
+/* Responsive – mobile: hide left menu by default */
+@media (max-width: 991px) {
+    .layout_inner__main {
+        flex-direction: column;
+    }
+
+    .layout_inner__left-menu {
+        width: 100%;
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+        margin-bottom: 16px;
+    }
+}
+
+/* Optional: toggle‑style sidebar on narrow screens */
+@media (max-width: 767px) {
+    .layout_inner__left-menu h3 {
+        font-size: 1rem;
+        margin-bottom: 8px;
+    }
+
+    .layout_inner__left-menu li {
+        margin-bottom: 2px;
+    }
+
+    .layout_inner__left-menu a {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Main content (lesson body) */
+.layout_inner__content {
+    flex: 1;
+    padding: 20px 16px;
+    margin: 0 auto;
+    background: #ffffff;
+}
+
+/* Heading inside lesson content */
+.layout_inner__content h1 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Links inside lesson content */
+.layout_inner__content a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.layout_inner__content a:hover {
+    text-decoration: underline;
+}
+
+/* Code / example blocks */
+.layout_inner__content pre {
+    padding: 12px;
+    background: #f5f5f5;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+
+.layout_inner__content code {
+    padding: 2px 4px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+/* Paragraphs and lists inside lesson */
+.layout_inner__content p,
+.layout_inner__content ul,
+.layout_inner__content ol {
+    margin-bottom: 12px;
+}
+
+.layout_inner__content ul,
+.layout_inner__content ol {}
+
+
+/* Responsive: smaller padding on mobile */
+@media (max-width: 480px) {
+    .layout_inner__content {
+        padding: 16px 12px;
+    }
+
+    .layout_inner__content h1 {
+        font-size: 1.3rem;
+    }
+
+    .layout_inner__left-menu {
+        padding: 12px 8px;
+    }
+}
+
+/* ===== layout_inner left menu – elegant sidebar ===== */
+
+/* Left inner menu box */
+.layout_inner__left-menu {
+    width: 220px;
+    background: #ffffff;
+    border-right: 1px solid #e9ecef;
+    padding: 16px 12px;
+    overflow-y: auto;
+    max-height: calc(100vh - 50px);
+}
+
+/* Title inside menu */
+.layout_inner__left-menu h3 {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 6px;
+}
+
+/* List of lessons */
+.layout_inner__left-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.layout_inner__left-menu li {
+    margin-bottom: 4px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.layout_inner__left-menu a {
+    display: block;
+    padding: 8px 10px;
+    text-decoration: none;
+    color: #555;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+/* Hover and active states */
+.layout_inner__left-menu a:hover {
+    background: #f0f7ff;
+    color: #007bff;
+}
+
+.layout_inner__left-menu li.active a {
+    background: #007bff;
+    color: #ffffff;
+}
+
+/* Responsive – mobile */
+@media (max-width: 991px) {
+    .layout_inner__left-menu {
+        width: 100%;
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+        margin-bottom: 16px;
+    }
+
+    .layout_inner__left-menu h3 {
+        margin-bottom: 8px;
+        font-size: 1rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .layout_inner__left-menu {
+        padding: 12px 8px;
+    }
+
+    .layout_inner__left-menu a {
+        padding: 6px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+.layout_inner__main .breadcrumb {
+    background: #fff;
+    border-radius: .5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .05);
+}
+
+.layout_inner__main .breadcrumb a {
+    text-decoration: none;
+    color: #0d6efd;
+    transition: color .2s ease;
+}
+
+.layout_inner__main .breadcrumb a:hover {
+    color: #0a58ca;
+}
+
+/* Lesson title */
+.layout_inner__main .lesson-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #212529;
+    position: relative;
+}
+
+.layout_inner__main .lesson-title::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #0d6efd;
+    margin-top: .5rem;
+    border-radius: 2px;
+}
+
+/* Lesson body */
+.layout_inner__main .lesson-body {
+    background: #fff;
+    padding: 2rem;
+    border-radius: .5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.layout_inner__main .lesson-body:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .08);
+}
+
+/* Buttons */
+.layout_inner__main .btn {
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all .2s ease;
+}
+
+.layout_inner__main .btn:hover {
+    transform: translateY(-1px);
+}
+
+/* Meta info */
+.layout_inner__main .lesson-meta small {
+    font-size: .9rem;
+}
+
+
+
+/* ==========================================================================
+   FOOTER STYLES
+   ========================================================================== */
+
+/* Gradient Background */
+#_footer.bg-gradient-dark {
+    background: linear-gradient(135deg,
+            #0f172a 0%,
+            #1e293b 50%,
+            #334155 100%);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Text Utilities */
+#_footer .text-light-75 {
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+#_footer .text-light-50 {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Hover Effects */
+#_footer .hover-primary:hover {
+    color: #3b82f6 !important;
+}
+
+#_footer .hover-success:hover {
+    color: #10b981 !important;
+}
+
+#_footer .hover-scale {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#_footer .hover-scale:hover {
+    transform: scale(1.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* Responsive Tweaks */
+@media (max-width: 768px) {
+    #_footer .row>div {
+        text-align: center !important;
+    }
+
+    #_footer h5 {
+        font-size: 1.25rem !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    footer {
+        display: none !important;
+    }
+}
+
+
+.offcanvas.offcanvas-start {
+    top: 57px;
+}
+
+.d-md-block {
+    margin-top: 23px;
+}

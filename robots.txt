@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /user/
+Allow: /
+
+# Sitemap location
+Sitemap: https://learn.onlinewebhub.com/sitemap.xml
