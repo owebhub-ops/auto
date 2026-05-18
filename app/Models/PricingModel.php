@@ -13,9 +13,17 @@ class PricingModel extends Model
     protected $useSoftDeletes = false;
     protected $protectFields = true;
     protected $allowedFields = [
-        'vehicle_id', 'ex_showroom_price', 'on_road_price', 'currency',
-        'emi_available', 'emi_amount', 'down_payment', 'insurance_cost',
-        'road_tax', 'discount_offers', 'price_validity'
+        'vehicle_id',
+        'ex_showroom_price',
+        'on_road_price',
+        'currency',
+        'emi_available',
+        'emi_amount',
+        'down_payment',
+        'insurance_cost',
+        'road_tax',
+        'discount_offers',
+        'price_validity'
     ];
 
     protected $useTimestamps = true;
@@ -44,16 +52,17 @@ class PricingModel extends Model
         $pricing = $this->where('vehicle_id', $vehicleId)
             ->where('emi_available', 1)
             ->first();
-        
+
         return $pricing ? [
             'emi_amount' => $pricing['emi_amount'],
             'down_payment' => $pricing['down_payment']
         ] : null;
     }
 
-    // Bonus: Update pricing
+
     public function updateVehiclePricing($vehicleId, $data)
     {
-        return $this->update($data, ['vehicle_id' => $vehicleId]);
+        return $this->where('vehicle_id', $vehicleId)->set($data)->update();
     }
+
 }

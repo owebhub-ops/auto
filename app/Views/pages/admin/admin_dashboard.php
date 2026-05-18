@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <div>
         <h1 class="h2 mb-1">Dashboard</h1>
-        <div class="text-muted small">Course and lesson overview</div>
+        <div class="text-muted small">Vehicle and pricing overview</div>
     </div>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
@@ -15,16 +15,16 @@
     <div class="col-md-6">
         <div class="card shadow-sm">
             <div class="card-body">
-                <div class="text-muted small mb-1">Total Courses</div>
-                <div class="display-6 fw-semibold"><?= esc($totalCourses ?? 0) ?></div>
+                <div class="text-muted small mb-1">Total Vehicles</div>
+                <div class="display-6 fw-semibold"><?= esc($totalVehicles ?? 0) ?></div>
             </div>
         </div>
     </div>
     <div class="col-md-6">
         <div class="card shadow-sm">
             <div class="card-body">
-                <div class="text-muted small mb-1">Total Lessons</div>
-                <div class="display-6 fw-semibold"><?= esc($totalLessons ?? 0) ?></div>
+                <div class="text-muted small mb-1">Total Pricing Records</div>
+                <div class="display-6 fw-semibold"><?= esc($totalPricings ?? 0) ?></div>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
 
 <div class="card shadow-sm">
     <div class="card-header bg-white">
-        <strong>Content Distribution</strong>
+        <strong>Data Distribution</strong>
     </div>
     <div class="card-body">
         <canvas id="contentChart" height="120"></canvas>

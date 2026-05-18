@@ -24,28 +24,19 @@ $routes->group('admin/contact', ['namespace' => 'App\Controllers\admin', 'filter
     $routes->post('delete/(:num)', 'AdminContactController::destroy/$1');
 });
 
-$routes->group('admin', ['namespace' => 'App\Controllers\admin', 'filter' => 'admin'], function ($routes) {
 
-    // Course management (admin/course/*)
-    $routes->group('course', function ($routes) {
-        $routes->get('/', 'AdminCourseController::index');
-        $routes->get('create', 'AdminCourseController::create');
-        $routes->post('store', 'AdminCourseController::store');
-        $routes->get('edit/(:num)', 'AdminCourseController::edit/$1');
-        $routes->post('update/(:num)', 'AdminCourseController::update/$1');
-        $routes->post('delete/(:num)', 'AdminCourseController::destroy/$1');
-    });
-
-    // Lesson management (admin/course/{id}/lesson/*) - Nested to avoid conflicts
-    $routes->group('course/(:num)/lesson', ['namespace' => 'App\Controllers\admin'], function ($routes) {
-        $routes->get('/', 'LessonController::index/$1');
-        $routes->get('create', 'LessonController::create/$1');
-        $routes->post('store', 'LessonController::store/$1');
-        $routes->get('edit/(:num)', 'LessonController::edit/$1/$2');
-        $routes->post('update/(:num)', 'LessonController::update/$1/$2');
-        $routes->post('delete/(:num)', 'LessonController::delete/$1/$2');
-    });
+// Admin Vehicle Routes
+$routes->group('admin/vehicle', ['namespace' => 'App\Controllers\admin'], function($routes) {
+    $routes->get('/', 'VehicleController::index');                  // list all vehicles
+    $routes->get('create', 'VehicleController::create');            // show create form
+    $routes->post('store', 'VehicleController::store');             // handle create form
+    $routes->get('show/(:num)', 'VehicleController::show/$1');      // show single vehicle card
+    $routes->get('edit/(:num)', 'VehicleController::edit/$1');      // show edit form
+    $routes->post('update/(:num)', 'VehicleController::update/$1'); // handle update form
+    $routes->post('delete/(:num)', 'VehicleController::delete/$1'); // delete vehicle
 });
+
+
 
 
 $routes->get('login', 'OAuthController::login');
@@ -63,8 +54,31 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 });
 
 
+
+// Cars listing and detail
 $routes->get('cars', 'CarsController::index');
+$routes->get('cars/sort/(:segment)', 'CarsController::index/$1');
+$routes->get('cars/category/(:segment)', 'CarsController::index/null/$1');
+$routes->get('cars/detail/(:num)', 'CarsController::detail/$1');
 $routes->get('cars/(:num)', 'CarsController::detail/$1');
+// Load More endpoint for AJAX
+$routes->get('cars/loadMore', 'CarsController::loadMore');
+
+$routes->get('cars/search', 'CarsController::search');
+
+$routes->get('cars/compareHome', 'CarsController::compareHome');
+// Standard compare route (query string ?ids=74,76,72)
+$routes->get('cars/compare', 'CarsController::compare');
+
+// Path-style flexible route (handles /compare/71/73/88/99 etc.)
+$routes->get('cars/compare/(:any)', 'CarsController::compare/$1');
+
+
+$routes->get('cars/features', 'FeaturesController::index');
+$routes->get('cars/features/(:segment)', 'FeaturesController::index/$1');
+$routes->get('cars/features/detail/(:num)', 'FeaturesController::detail/$1');
+$routes->get('cars/features/search', 'FeaturesController::search');
+$routes->get('cars/features/loadMore', 'FeaturesController::loadMore');
 
 
 // Static Pages Routes (SEO-friendly)
@@ -111,8 +125,8 @@ $routes->get('contact/captcha', 'ContactController::captcha');
 $routes->get('captcha', 'CaptchaController::index');
 
 // Global 404 override
-$routes->set404Override('Errors::show404');
+//$routes->set404Override('Errors::show404');
 
 
 // Catch-all route AFTER specific routes
-$routes->get('(:any)', 'Errors::catchAll/$1');
+//$routes->get('(:any)', 'Errors::catchAll/$1');

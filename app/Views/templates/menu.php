@@ -26,12 +26,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold" href="<?= base_url('features') ?>">
+                    <a class="nav-link fw-semibold" href="<?= base_url('cars/features') ?>">
                         <i class="bi bi-list-check me-1"></i> Features
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold" href="<?= base_url('compare') ?>">
+                    <a class="nav-link fw-semibold" href="<?= base_url('cars/compare') ?>">
                         <i class="bi bi-shuffle me-1"></i> Compare
                     </a>
                 </li>

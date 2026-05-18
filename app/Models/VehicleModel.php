@@ -566,4 +566,63 @@ class VehicleModel extends Model
 
         return array_column($results, 'body_type');
     }
+
+    /*
+|--------------------------------------------------------------------------
+| Features Page Helpers
+|--------------------------------------------------------------------------
+*/
+
+    public function getVehiclesWithFeatures()
+    {
+        $results = $this->select('
+            vehicles.*,
+            pricing.ex_showroom_price,
+            pricing.on_road_price,
+            pricing.currency
+        ')
+            ->join('pricing', 'pricing.vehicle_id = vehicles.vehicle_id', 'left')
+            ->orderBy('vehicles.make ASC')
+            ->findAll();
+
+        foreach ($results as &$row) {
+            $row = $this->decodeJsonFields($row);
+        }
+
+        return $results;
+    }
+
+    public function getVehiclesByFeatureCategory($category)
+    {
+        $column = strtolower($category) . '_features';
+
+        // Handle specific naming exceptions
+        if ($category === 'Camera')
+            $column = 'camera_features';
+        if ($category === 'Comfort')
+            $column = 'comfort_features';
+        if ($category === 'Infotainment')
+            $column = 'infotainment';
+
+        $builder = $this->select('
+            vehicles.*,
+            pricing.ex_showroom_price,
+            pricing.on_road_price,
+            pricing.currency
+        ')
+            ->join('pricing', 'pricing.vehicle_id = vehicles.vehicle_id', 'left');
+
+        // Only fetch vehicles where this feature column exists/is not empty
+        $builder->where($column . ' !=', '');
+        $builder->where($column . ' IS NOT NULL');
+
+        $results = $builder->orderBy('vehicles.make ASC')->findAll();
+
+        foreach ($results as &$row) {
+            $row = $this->decodeJsonFields($row);
+        }
+
+        return $results;
+    }
+
 }

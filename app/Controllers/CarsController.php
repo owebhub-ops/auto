@@ -87,6 +87,113 @@ class CarsController extends Controller
         ]);
     }
 
+    public function loadMore()
+    {
+        $perPage = 50;
+        $page = $this->request->getGet('page')['cars'] ?? 1;
+
+        $vehicles = $this->vehicleModel
+            ->select('vehicles.vehicle_id, vehicles.make, vehicles.model')
+            ->orderBy('vehicles.created_at', 'DESC')
+            ->paginate($perPage, 'cars', $page);
+
+        $pager = $this->vehicleModel->pager;
+
+        return $this->response->setJSON([
+            'cars' => $vehicles,
+            'hasMore' => $page < $pager->getPageCount('cars'),
+        ]);
+    }
+
+
+    public function compare($ids = null)
+    {
+        // If no path param, check query string
+        if (!$ids) {
+            $ids = $this->request->getGet('ids'); // handles ?ids=74,76,72
+        }
+    
+        if (!$ids) {
+            return redirect()->to('/cars/compareHome')->with('error', 'No cars selected for comparison');
+        }
+    
+        // Normalize: convert slashes to commas
+        $ids = str_replace('/', ',', $ids);
+    
+        // Split into array and filter out empties
+        $vehicleIds = array_filter(explode(',', $ids));
+    
+        $vehicles = [];
+        foreach ($vehicleIds as $id) {
+            if (is_numeric($id)) {
+                $vehicle = $this->vehicleModel->getVehicleWithPricing($id);
+                if ($vehicle) {
+                    // Ensure pricing is always present
+                    $vehicle['pricing'] = $vehicle['pricing'] ?? [];
+                    $vehicles[] = $vehicle;
+                }
+            }
+        }
+    
+        if (count($vehicles) < 2) {
+            return redirect()->to('/cars/compareHome')->with('error', 'Select at least two cars to compare');
+        }
+    
+        $data = [
+            'page_title' => 'Compare Cars',
+            'vehicles'   => $vehicles
+        ];
+        
+        
+        $content = view('pages/cars/compare', $data);
+        return view('templates/layout_inner_home', [
+            'pageData' => [
+                'title'       => 'Car Comparison',
+                'description' => 'Compare specs, features, and pricing of selected cars',
+                'keywords'    => 'car comparison, specs, features, price'
+            ],
+            'content' => $content
+        ]);
+    }
+    
+
+    public function compareHome()
+    {
+        $data = [
+            'page_title' => 'Compare Cars',
+            'vehicles' => [] // empty list for initial page
+        ];
+
+        $content = view('pages/cars/compareHome', $data);
+        return view('templates/layout_inner_home', [
+            'pageData' => [
+                'title' => 'Car Comparison',
+                'description' => 'Compare specs, features, and pricing of selected cars',
+                'keywords' => 'car comparison, specs, features, price'
+            ],
+            'content' => $content
+        ]);
+    }
+
+    public function search()
+    {
+        $query = $this->request->getGet('q');
+        if (!$query) {
+            return $this->response->setJSON([]);
+        }
+
+        // Build query properly with grouping
+        $builder = $this->vehicleModel
+            ->select('vehicle_id, make, model, variant')
+            ->groupStart()
+            ->like('make', $query)
+            ->orLike('model', $query)
+            ->groupEnd();
+
+        $results = $builder->findAll(10);
+
+        return $this->response->setJSON($results);
+    }
 
 
 }

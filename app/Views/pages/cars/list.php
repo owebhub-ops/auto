@@ -599,22 +599,34 @@
         };
     }
 
+    function normalize(value) {
+        return (value ?? '').toString().trim().toLowerCase();
+    }
+
     function filterAndSortCars() {
-        const search = document.getElementById('carSearch').value.toLowerCase().trim();
-        const fuel = document.getElementById('fuelFilter').value;
-        const body = document.getElementById('bodyFilter').value;
+        const search = normalize(document.getElementById('carSearch')?.value);
+        const fuel = normalize(document.getElementById('fuelFilter')?.value);
+        const body = normalize(document.getElementById('bodyFilter')?.value);
 
         let filtered = allCars.filter(car => {
-            const matchesSearch = !search ||
-                car.make.toLowerCase().includes(search) ||
-                car.model.toLowerCase().includes(search) ||
-                car.variant?.toLowerCase().includes(search);
-            const matchesFuel = !fuel || car.fuel_type === fuel;
-            const matchesBody = !body || car.body_type === body;
+            const make = normalize(car.make);
+            const model = normalize(car.model);
+            const variant = normalize(car.variant);
+            const fuelType = normalize(car.fuel_type);
+            const bodyType = normalize(car.body_type);
+
+            const matchesSearch =
+                !search ||
+                make.includes(search) ||
+                model.includes(search) ||
+                variant.includes(search);
+
+            const matchesFuel = !fuel || fuelType === fuel;
+            const matchesBody = !body || bodyType === body;
+
             return matchesSearch && matchesFuel && matchesBody;
         });
 
-        // Advanced sorting
         filtered.sort((a, b) => {
             const priceA = parseFloat(a.ex_showroom_price) || Infinity;
             const priceB = parseFloat(b.ex_showroom_price) || Infinity;
@@ -625,7 +637,7 @@
                 case 'price-low': return priceA - priceB;
                 case 'price-high': return priceB - priceA;
                 case 'mileage': return mileageB - mileageA;
-                case 'make': return (a.make || '').localeCompare(b.make || '');
+                case 'make': return normalize(a.make).localeCompare(normalize(b.make));
                 default: return 0;
             }
         });
@@ -633,6 +645,7 @@
         renderCars(filtered);
         updateStats(filtered.length);
     }
+
 
     function sortCars(value) {
         currentSort = value;
@@ -648,23 +661,34 @@
     }
 
     function createPremiumCarCard(car, index) {
+        const make = car.make ?? '';
+        const model = car.model ?? '';
+        const variant = car.variant ?? '';
+        const bodyType = car.body_type ?? '';
+        const fuelType = car.fuel_type ?? '';
+        const transmission = car.transmission ?? '';
+        const mileage = car.mileage_kmpl ?? '';
+        const seating = car.seating_capacity ?? 5;
+        const price = Number(car.ex_showroom_price || 0).toLocaleString();
+
         return `
     <div class="col-xl-3 col-lg-4 col-md-6 car-card-wrapper fade-in-up"
-         data-make="${car.make || ''}"
-         data-model="${car.model || ''}"
-         data-fuel="${car.fuel_type || ''}"
-         data-body="${car.body_type || ''}"
+         data-make="${make}"
+         data-model="${model}"
+         data-fuel="${fuelType}"
+         data-body="${bodyType}"
          data-price="${car.ex_showroom_price || 0}"
          data-mileage="${car.mileage_kmpl || 0}"
          style="animation-delay:${index * 0.08}s">
+
 
         <div class="car-card h-100 border-0 shadow-lg overflow-hidden rounded-4 position-relative hover-lift">
 
             <div class="car-image position-relative overflow-hidden bg-dark">
             <?php /*
-                <img src="${car.image_url || '/public/images/no-car.jpg'}"
-                     alt="${car.make || ''} ${car.model || ''}"
-                     class="img-fluid w-100 h-100 object-fit-cover transition-scale"> */ ?>
+<img src="${car.image_url || '/public/images/no-car.jpg'}"
+alt="${car.make || ''} ${car.model || ''}"
+class="img-fluid w-100 h-100 object-fit-cover transition-scale"> */ ?>
 
                 <div class="car-badges position-absolute top-3 end-3 d-flex flex-column gap-1">
 
@@ -702,18 +726,19 @@
             <div class="car-details p-4">
 
                 <div class="car-header mb-3">
-                    <h5 class="car-brand fw-bold text-dark mb-1">${car.make || ''}</h5>
-                    <h4 class="car-model fw-semibold text-primary mb-2">${car.model || ''}</h4>
+                   <h5 class="car-brand fw-bold text-dark mb-1">${make}</h5>
+<h4 class="car-model fw-semibold text-primary mb-2">${model}</h4>
+<div class="car-category badge bg-light border text-success px-3 py-2 rounded-pill">
+    ${bodyType || 'Vehicle'}
+</div>
 
-                    <div class="car-category badge bg-light border text-success px-3 py-2 rounded-pill">
-                        ${car.body_type || ''}
-                    </div>
                 </div>
 
-                ${car.variant ? `
-                    <div class="car-variant badge bg-light text-dark px-3 py-2 mb-3 rounded-pill shadow-sm">
-                        ${car.variant}
-                    </div>` : ''}
+               ${variant ? `
+    <div class="car-variant badge bg-light text-dark px-3 py-2 mb-3 rounded-pill shadow-sm">
+        ${variant}
+    </div>` : ''}
+
 
                 <div class="car-specs mb-4">
 
@@ -754,20 +779,82 @@
         const statsEl = document.querySelector('.section-stats .text-danger');
         if (statsEl) statsEl.textContent = count + ' Available';
     }
+    let currentPage = 1;
+    const loadMoreUrl = "<?= site_url('cars/loadMore') ?>";
 
-    // Load More Simulation
     document.getElementById('loadMore')?.addEventListener('click', function () {
         const btn = this;
         const spinner = btn.querySelector('.spinner-border');
         spinner.classList.remove('d-none');
         btn.disabled = true;
 
-        setTimeout(() => {
-            spinner.classList.add('d-none');
-            btn.disabled = false;
-            // Simulate loading more cars
-            console.log('Loaded more cars!');
-        }, 1500);
+        currentPage++;
+
+        fetch(`${loadMoreUrl}?page[cars]=${currentPage}`)
+            .then(res => res.json())
+            .then(data => {
+                spinner.classList.add('d-none');
+                btn.disabled = false;
+
+                const carList = document.getElementById('carsGrid');
+                if (!carList) return;
+
+                const carsArray = Array.isArray(data.cars) ? data.cars : Object.values(data.cars);
+
+                carsArray.forEach(car => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'col-md-3 mb-4'; // Bootstrap grid column
+
+                    wrapper.innerHTML = `
+                    <div class="car-details p-4 shadow-sm border rounded">
+                        <div class="car-header mb-3">
+                            <h5 class="car-brand fw-bold text-dark mb-1">${car.make}</h5>
+                            <h4 class="car-model fw-semibold text-primary mb-2">${car.model}</h4>
+                            <div class="car-category badge bg-light border text-success px-3 py-2 rounded-pill">
+                               
+                                 ${car.body_type || ''}
+                            </div>
+                        </div>
+
+                        <div class="car-variant badge bg-light text-dark px-3 py-2 mb-3 rounded-pill shadow-sm">
+                            ${car.variant || ''}
+                        </div>
+
+                        <div class="car-specs mb-4">
+                            <div class="spec-row d-flex justify-content-between align-items-center py-2 border-bottom">
+                                <span class="spec-label">Mileage</span>
+                                <span class="spec-value fw-semibold">${car.mileage_kmpl ?? ''} kmpl</span>
+                            </div>
+                            <div class="spec-row d-flex justify-content-between align-items-center py-2 border-bottom">
+                                <span class="spec-label">Transmission</span>
+                                <span class="spec-value fw-semibold">${car.transmission ?? ''}</span>
+                            </div>
+                            <div class="spec-row d-flex justify-content-between align-items-center py-2">
+                                <span class="spec-label">Seating</span>
+                                <span class="spec-value fw-semibold">${car.seating_capacity ?? ''} Seats</span>
+                            </div>
+                        </div>
+
+                        <div class="car-actions">
+                            <a href="/auto/cars/${car.vehicle_id}" class="btn btn-primary w-100 fw-bold rounded-pill shadow-lg mb-2">
+                                Explore Details
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+                    carList.appendChild(wrapper);
+                });
+
+                if (!data.hasMore) {
+                    btn.style.display = 'none';
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                spinner.classList.add('d-none');
+                btn.disabled = false;
+            });
     });
 
     // View Toggle Functionality

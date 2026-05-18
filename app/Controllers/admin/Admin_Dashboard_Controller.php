@@ -3,30 +3,32 @@
 namespace App\Controllers\admin;
 
 use App\Controllers\BaseController;
-use App\Models\admin\CourseModel;
-use App\Models\admin\LessonModel;
+use App\Models\admin\PricingModel;
+use App\Models\admin\VehicleModel;
 
 class Admin_Dashboard_Controller extends BaseController
 {
     public function index()
     {
-        $courseModel = new CourseModel();
-        $lessonModel = new LessonModel();
+        $pricingModel = new PricingModel();
+        $vehicleModel = new VehicleModel();
 
-        $totalCourses = $courseModel->countAllResults();
-        $totalLessons = $lessonModel->countAllResults();
+        // Count totals
+        $totalVehicles = $vehicleModel->countAllResults();
+        $totalPricings = $pricingModel->countAllResults();
 
+        // Example chart data
         $chartData = [
-            'labels' => ['Courses', 'Lessons'],
-            'values' => [$totalCourses, $totalLessons],
+            'labels' => ['Vehicles', 'Pricing Records'],
+            'values' => [$totalVehicles, $totalPricings],
         ];
 
         $pageData = [
-            'title' => 'AI Education & Web Development Courses',
-            'description' => 'Master HTML, CSS, JavaScript, PHP with interactive quizzes, tutorials and exercises. Start your web development journey today.',
-            'keywords' => 'coding tutorials, web development, HTML quiz, CSS quiz, JavaScript quiz, PHP learning',
-            'totalCourses' => $totalCourses,
-            'totalLessons' => $totalLessons,
+            'title' => 'Vehicle Pricing Dashboard',
+            'description' => 'Manage ex-showroom and on-road prices, EMI options, and discounts for all vehicles.',
+            'keywords' => 'vehicle pricing, car prices, EMI, discounts, Hyundai Creta',
+            'totalVehicles' => $totalVehicles,
+            'totalPricings' => $totalPricings,
             'chartData' => $chartData,
         ];
 
@@ -39,9 +41,9 @@ class Admin_Dashboard_Controller extends BaseController
     public function profile()
     {
         $pageData = [
-            'title' => 'AI Education & Web Development Courses',
-            'description' => 'Master HTML, CSS, JavaScript, PHP with interactive quizzes, tutorials and exercises. Start your web development journey today.',
-            'keywords' => 'coding tutorials, web development, HTML quiz, CSS quiz, JavaScript quiz, PHP learning'
+            'title' => 'Admin Profile - Vehicle Pricing',
+            'description' => 'View and manage your admin profile for vehicle pricing system.',
+            'keywords' => 'admin profile, vehicle pricing, car management'
         ];
 
         return view('templates/admin/layout_admin', [
@@ -53,9 +55,9 @@ class Admin_Dashboard_Controller extends BaseController
     public function settings()
     {
         $pageData = [
-            'title' => 'AI Education & Web Development Courses',
-            'description' => 'Master HTML, CSS, JavaScript, PHP with interactive quizzes, tutorials and exercises. Start your web development journey today.',
-            'keywords' => 'coding tutorials, web development, HTML quiz, CSS quiz, JavaScript quiz, PHP learning'
+            'title' => 'Admin Settings - Vehicle Pricing',
+            'description' => 'Configure system settings for vehicle pricing, EMI, and discounts.',
+            'keywords' => 'admin settings, vehicle pricing, EMI, discounts'
         ];
 
         return view('templates/admin/layout_admin', [
@@ -63,5 +65,4 @@ class Admin_Dashboard_Controller extends BaseController
             'content' => view('pages/admin/admin_settings', $pageData),
         ]);
     }
-
 }

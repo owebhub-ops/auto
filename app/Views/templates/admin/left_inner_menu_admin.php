@@ -22,36 +22,39 @@ $userEmail = session()->get('email');
                 <i class="bi bi-envelope me-2"></i> Contact
             </a>
         </li>
+
+        
+
+        <!-- Vehicles & Pricing -->
         <li class="mb-2">
             <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
-                data-bs-toggle="collapse" data-bs-target="#course-collapse" aria-expanded="false"
-                aria-controls="course-collapse">
-                <i class="bi bi-journal-text me-2"></i> Course & Lesson
+                data-bs-toggle="collapse" data-bs-target="#vehicle-collapse" aria-expanded="false"
+                aria-controls="vehicle-collapse">
+                <i class="bi bi-car-front me-2"></i> Vehicles & Pricing
             </button>
-
-            <div class="collapse" id="course-collapse">
+            <div class="collapse" id="vehicle-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ms-3 mt-2">
                     <li>
-                        <a href="<?= site_url('admin/course') ?>" class="link-dark rounded d-block py-1">
-                            <i class="bi bi-grid me-2"></i> Courses
+                        <a href="<?= site_url('admin/vehicle') ?>" class="link-dark rounded d-block py-1">
+                            <i class="bi bi-car-front-fill me-2"></i> Vehicles
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="link-dark rounded d-block py-1">
-                            <i class="bi bi-book me-2"></i> Lessons
+                        <a href="<?= site_url('admin/vehicle/pricing') ?>" class="link-dark rounded d-block py-1">
+                            <i class="bi bi-cash-stack me-2"></i> Pricing
                         </a>
                     </li>
                 </ul>
             </div>
         </li>
 
+        <!-- Account -->
         <li class="mb-2">
             <button class="btn btn-toggle align-items-center rounded collapsed w-100 text-start"
                 data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false"
                 aria-controls="account-collapse">
                 <i class="bi bi-person-circle me-2"></i> Account
             </button>
-
             <div class="collapse" id="account-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small ms-3 mt-2">
                     <li>

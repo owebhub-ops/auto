@@ -13,7 +13,8 @@
     <?php endif; ?>
 
     <link rel="canonical" href="<?= current_url() ?>">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="noindex, nofollow">
+
     <meta name="author" content="AutoHub Team">
 
     <!-- Open Graph -->

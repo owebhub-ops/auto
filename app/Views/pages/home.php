@@ -86,7 +86,7 @@
                         class="btn btn-primary btn-lg px-5 py-3 fs-5 rounded-pill shadow-lg">
                         <i class="bi bi-car-front me-2"></i>Browse Cars
                     </a>
-                    <a href="<?= base_url('compare') ?>"
+                    <a href="<?= base_url('cars/compareHome') ?>"
                         class="btn btn-outline-dark btn-lg px-5 py-3 fs-5 rounded-pill">
                         Compare Models
                     </a>
