@@ -48,30 +48,31 @@ $routes->get('logout', 'OAuthController::logout');
 
 // Auth protected pages
 $routes->group('', ['filter' => 'auth'], function ($routes) {
-    $routes->get('dashboard', 'UserController::dashboard');
+    $routes->get('mydashboard', 'UserController::dashboard');
     $routes->get('profile', 'UserController::profile');
-    $routes->get('courses/my-courses', 'UserController::myCourses');
+    $routes->get('favorites', 'UserController::favorites');
+
 });
 
 
-
+$routes->get('cars/compareHome', 'CarsController::compareHome');
+$routes->get('cars/compare', 'CarsController::compare');
+$routes->get('cars/compare/(:any)', 'CarsController::compare/$1'); // For URL segment style
+$routes->get('cars/search', 'CarsController::search'); 
 // Cars listing and detail
 $routes->get('cars', 'CarsController::index');
 $routes->get('cars/sort/(:segment)', 'CarsController::index/$1');
 $routes->get('cars/category/(:segment)', 'CarsController::index/null/$1');
 $routes->get('cars/detail/(:num)', 'CarsController::detail/$1');
+$routes->get('cars/detail/(:segment)', 'CarsController::details/$1');
+
 $routes->get('cars/(:num)', 'CarsController::detail/$1');
+$routes->get('cars/(:segment)', 'CarsController::details/$1');
 // Load More endpoint for AJAX
 $routes->get('cars/loadMore', 'CarsController::loadMore');
 
-$routes->get('cars/search', 'CarsController::search');
 
-$routes->get('cars/compareHome', 'CarsController::compareHome');
-// Standard compare route (query string ?ids=74,76,72)
-$routes->get('cars/compare', 'CarsController::compare');
 
-// Path-style flexible route (handles /compare/71/73/88/99 etc.)
-$routes->get('cars/compare/(:any)', 'CarsController::compare/$1');
 
 
 $routes->get('cars/features', 'FeaturesController::index');

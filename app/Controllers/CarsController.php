@@ -87,6 +87,44 @@ class CarsController extends Controller
         ]);
     }
 
+
+    public function details($slug = '')
+    {
+        if (!$slug) {
+            return redirect()->to('/cars')->with('error', 'Invalid car URL');
+        }
+
+        // Fetch vehicle by slug
+        $vehicle = $this->vehicleModel->getVehicleBySlug($slug);
+
+        if (!$vehicle) {
+            return redirect()->to('/cars')->with('error', 'Car not found');
+        }
+
+        $pricing = $vehicle['pricing'] ?? [];
+        unset($vehicle['pricing']);
+
+        $data = [
+            'page_title' => esc($vehicle['make'] . ' ' . $vehicle['model'] . ' ' . ($vehicle['variant'] ?? '') . ' - Details'),
+            'vehicle' => $vehicle,
+            'pricing' => $pricing
+        ];
+
+        $content = view('pages/cars/detail', $data);
+        return view('templates/layout_inner_home', [
+            'pageData' => [
+                'title' => esc($vehicle['make'] . ' ' . $vehicle['model'] . ' ' . ($vehicle['variant'] ?? '') . ' - Price, Specs & Features'),
+                'description' => $vehicle['make'] . ' ' . $vehicle['model'] . ($vehicle['variant'] ? ' ' . $vehicle['variant'] : '') .
+                    ' price starts at ₹' . number_format($pricing['ex_showroom_price'] ?? 0, 0, '.', ',') .
+                    '. Check mileage, features, images and more.',
+                'keywords' => $vehicle['make'] . ' ' . $vehicle['model'] . ', ' . ($vehicle['variant'] ?? '') .
+                    ', price, specs, mileage, features, review, ' . $vehicle['fuel_type']
+            ],
+            'content' => $content
+        ]);
+    }
+
+
     public function loadMore()
     {
         $perPage = 50;
@@ -112,17 +150,17 @@ class CarsController extends Controller
         if (!$ids) {
             $ids = $this->request->getGet('ids'); // handles ?ids=74,76,72
         }
-    
+
         if (!$ids) {
-            return redirect()->to('/cars/compareHome')->with('error', 'No cars selected for comparison');
+            return redirect()->to('/cars/compare-home')->with('error', 'No cars selected for comparison');
         }
-    
+
         // Normalize: convert slashes to commas
         $ids = str_replace('/', ',', $ids);
-    
+
         // Split into array and filter out empties
         $vehicleIds = array_filter(explode(',', $ids));
-    
+
         $vehicles = [];
         foreach ($vehicleIds as $id) {
             if (is_numeric($id)) {
@@ -134,33 +172,31 @@ class CarsController extends Controller
                 }
             }
         }
-    
+
         if (count($vehicles) < 2) {
-            return redirect()->to('/cars/compareHome')->with('error', 'Select at least two cars to compare');
+            return redirect()->to('/cars/compare-home')->with('error', 'Select at least two cars to compare');
         }
-    
+
         $data = [
             'page_title' => 'Compare Cars',
-            'vehicles'   => $vehicles
+            'vehicles' => $vehicles
         ];
-        
-        
+
         $content = view('pages/cars/compare', $data);
         return view('templates/layout_inner_home', [
             'pageData' => [
-                'title'       => 'Car Comparison',
+                'title' => 'Car Comparison',
                 'description' => 'Compare specs, features, and pricing of selected cars',
-                'keywords'    => 'car comparison, specs, features, price'
+                'keywords' => 'car comparison, specs, features, price'
             ],
             'content' => $content
         ]);
     }
-    
 
     public function compareHome()
     {
         $data = [
-            'page_title' => 'Compare Cars',
+            'page_title' => 'Compare Cars - Select Vehicles',
             'vehicles' => [] // empty list for initial page
         ];
 
@@ -174,11 +210,20 @@ class CarsController extends Controller
             'content' => $content
         ]);
     }
-
     public function search()
     {
+        // Ensure we return pure JSON without DebugBar
+        // Disable DebugBar for this request
+        $this->response->setHeader('Content-Type', 'application/json');
+
+        // Tell DebugBar to not collect data for this request
+        if (function_exists('debug_bar')) {
+            debug_bar()->setCollectors([]);
+        }
+
         $query = $this->request->getGet('q');
-        if (!$query) {
+
+        if (!$query || strlen($query) < 2) {
             return $this->response->setJSON([]);
         }
 
@@ -186,12 +231,15 @@ class CarsController extends Controller
         $builder = $this->vehicleModel
             ->select('vehicle_id, make, model, variant')
             ->groupStart()
-            ->like('make', $query)
-            ->orLike('model', $query)
-            ->groupEnd();
+            ->like('make', $query, 'both', null, true)
+            ->orLike('model', $query, 'both', null, true)
+            ->orLike('variant', $query, 'both', null, true)
+            ->groupEnd()
+            ->limit(10);
 
-        $results = $builder->findAll(10);
+        $results = $builder->findAll();
 
+        // Return JSON response
         return $this->response->setJSON($results);
     }
 

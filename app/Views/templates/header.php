@@ -13,7 +13,7 @@
     <?php endif; ?>
 
     <link rel="canonical" href="<?= current_url() ?>">
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="index, follow">
 
     <meta name="author" content="AutoHub Team">
 
@@ -96,9 +96,9 @@
     <script src="<?= base_url('public/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 
     <!-- Google Adsense -->
-    <!-- <meta name="google-adsense-account" content="ca-pub-3584384822563781">
+    <meta name="google-adsense-account" content="ca-pub-3584384822563781">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3584384822563781"
-        crossorigin="anonymous"></script> -->
+        crossorigin="anonymous"></script>
 </head>
 
 <body class="cars-theme">

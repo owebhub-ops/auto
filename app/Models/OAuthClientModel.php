@@ -14,6 +14,6 @@ class OAuthClientModel extends Model
      */
     public function getGoogleClient()
     {
-        return $this->where('client_id', '740289682350-813p3180jastbro3geoe6gfsnebhbjlo.apps.googleusercontent.com')->first();
+        return $this->where('client_id', '154920762847-fmpjsdvihri17efjfu4alkfjibst640q.apps.googleusercontent.com')->first();
     }
 }

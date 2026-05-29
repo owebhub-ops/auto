@@ -9,9 +9,10 @@ class Home extends Controller
     {
         // SEO data for home page
         $pageData = [
-            'title' => 'AI Education & Web Development Courses',
-            'description' => 'Master HTML, CSS, JavaScript, PHP with interactive quizzes, tutorials and exercises. Start your web development journey today.',
-            'keywords' => 'coding tutorials, web development, HTML quiz, CSS quiz, JavaScript quiz, PHP learning'
+            'title' => 'AutoOWH | Expert Car Reviews, Compare Models & Specs',
+            'description' => 'AutoOWH - Discover detailed car specifications, expert reviews, side-by-side comparisons, and the latest automotive insights. Find the perfect SUV, Sedan, or EV for your lifestyle.',
+            'keywords' => 'car reviews, car specifications, compare cars, SUV, sedan, electric vehicles, car mileage, safety ratings, AutoOWH'
+
         ];
 
         // Load home content and pass to layout

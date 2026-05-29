@@ -17,6 +17,7 @@ class VehicleModel extends Model
         'make',
         'model',
         'variant',
+        'slug',
         'year',
         'body_type',
         'fuel_type',
@@ -624,5 +625,22 @@ class VehicleModel extends Model
 
         return $results;
     }
+
+    public function getVehicleBySlug($slug)
+    {
+        return $this->where('slug', $slug)->first();
+    }
+
+    public function getRecentVehicles($userId)
+    {
+        return $this->db->table('vehicles')
+            ->join('pricing', 'pricing.vehicle_id = vehicles.vehicle_id', 'left')
+            ->where('vehicles.owner_id', $userId)
+            ->orderBy('vehicles.updated_at', 'DESC')
+            ->limit(5)
+            ->get()
+            ->getResultArray();
+    }
+
 
 }

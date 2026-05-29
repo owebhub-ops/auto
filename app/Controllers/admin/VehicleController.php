@@ -28,12 +28,12 @@ class VehicleController extends BaseController
 
         $pageData = [
             'vehicles' => $vehicles,
-            'pager'    => $this->vehicleModel->pager,
+            'pager' => $this->vehicleModel->pager,
         ];
 
         return view('templates/admin/layout_admin', [
             'pageData' => $pageData,
-            'content'  => view('pages/admin/vehicle/index', $pageData),
+            'content' => view('pages/admin/vehicle/index', $pageData),
         ]);
     }
 
@@ -55,7 +55,7 @@ class VehicleController extends BaseController
 
         return view('templates/admin/layout_admin', [
             'pageData' => $pageData,
-            'content'  => view('pages/admin/vehicle/show', $pageData),
+            'content' => view('pages/admin/vehicle/show', $pageData),
         ]);
     }
 
@@ -69,9 +69,9 @@ class VehicleController extends BaseController
     public function store()
     {
         $validation = $this->validate([
-            'make'  => 'required|max_length[100]',
+            'make' => 'required|max_length[100]',
             'model' => 'required|max_length[100]',
-            'year'  => 'required|integer',
+            'year' => 'required|integer',
         ]);
 
         if (!$validation) {
@@ -79,43 +79,59 @@ class VehicleController extends BaseController
         }
 
         $vehicleId = $this->vehicleModel->insert([
-            'make'              => $this->request->getPost('make'),
-            'model'             => $this->request->getPost('model'),
-            'variant'           => $this->request->getPost('variant'),
-            'year'              => $this->request->getPost('year'),
-            'fuel_type'         => $this->request->getPost('fuel_type'),
-            'image_url'         => $this->request->getPost('image_url'),
-            'brochure_url'      => $this->request->getPost('brochure_url'),
-            'suspension'        => $this->request->getPost('suspension'),
-            'brakes'            => $this->request->getPost('brakes'),
-            'safety_features'   => $this->request->getPost('safety_features'),
-            'infotainment'      => $this->request->getPost('infotainment'),
-            'comfort_features'  => $this->request->getPost('comfort_features'),
+            'make' => $this->request->getPost('make'),
+            'model' => $this->request->getPost('model'),
+            'variant' => $this->request->getPost('variant'),
+            'year' => $this->request->getPost('year'),
+            'fuel_type' => $this->request->getPost('fuel_type'),
+            'image_url' => $this->request->getPost('image_url'),
+            'brochure_url' => $this->request->getPost('brochure_url'),
+            'suspension' => $this->request->getPost('suspension'),
+            'brakes' => $this->request->getPost('brakes'),
+            'safety_features' => $this->request->getPost('safety_features'),
+            'infotainment' => $this->request->getPost('infotainment'),
+            'comfort_features' => $this->request->getPost('comfort_features'),
             'interior_features' => $this->request->getPost('interior_features'),
             'exterior_features' => $this->request->getPost('exterior_features'),
-            'color_options'     => $this->request->getPost('color_options'),
-            'warranty'          => $this->request->getPost('warranty'),
+            'color_options' => $this->request->getPost('color_options'),
+            'warranty' => $this->request->getPost('warranty'),
         ]);
 
         if ($this->request->getPost('ex_showroom_price')) {
             $this->pricingModel->insert([
-                'vehicle_id'        => $vehicleId,
+                'vehicle_id' => $vehicleId,
                 'ex_showroom_price' => $this->request->getPost('ex_showroom_price'),
-                'on_road_price'     => $this->request->getPost('on_road_price'),
-                'emi_available'     => $this->request->getPost('emi_available'),
-                'emi_amount'        => $this->request->getPost('emi_amount'),
-                'down_payment'      => $this->request->getPost('down_payment'),
-                'insurance_cost'    => $this->request->getPost('insurance_cost'),
-                'road_tax'          => $this->request->getPost('road_tax'),
-                'discount_offers'   => $this->request->getPost('discount_offers'),
-                'price_validity'    => $this->request->getPost('price_validity'),
-                'currency'          => $this->request->getPost('currency') ?: 'INR',
+                'on_road_price' => $this->request->getPost('on_road_price'),
+                'emi_available' => $this->request->getPost('emi_available'),
+                'emi_amount' => $this->request->getPost('emi_amount'),
+                'down_payment' => $this->request->getPost('down_payment'),
+                'insurance_cost' => $this->request->getPost('insurance_cost'),
+                'road_tax' => $this->request->getPost('road_tax'),
+                'discount_offers' => $this->request->getPost('discount_offers'),
+                'price_validity' => $this->request->getPost('price_validity'),
+                'currency' => $this->request->getPost('currency') ?: 'INR',
             ]);
         }
 
         return redirect()->to(site_url("admin/vehicle"))
             ->with('success', 'Vehicle created successfully.');
     }
+
+    public function generateSlug($vehicle)
+    {
+        return strtolower(
+            url_title(
+                $vehicle['make'] . '-' .
+                $vehicle['model'] . '-' .
+                ($vehicle['variant'] ?? '') . '-' .
+                $vehicle['fuel_type'] . '-' .
+                $vehicle['transmission'],
+                '-',
+                true
+            )
+        );
+    }
+
 
     public function edit($vehicleId)
     {
@@ -133,7 +149,7 @@ class VehicleController extends BaseController
 
         return view('templates/admin/layout_admin', [
             'pageData' => $pageData,
-            'content'  => view('pages/admin/vehicle/edit', $pageData),
+            'content' => view('pages/admin/vehicle/edit', $pageData),
         ]);
     }
 
@@ -145,9 +161,9 @@ class VehicleController extends BaseController
         }
 
         $validation = $this->validate([
-            'make'  => 'required|max_length[100]',
+            'make' => 'required|max_length[100]',
             'model' => 'required|max_length[100]',
-            'year'  => 'required|integer',
+            'year' => 'required|integer',
         ]);
 
         if (!$validation) {
@@ -155,37 +171,37 @@ class VehicleController extends BaseController
         }
 
         $this->vehicleModel->update($vehicleId, [
-            'make'              => $this->request->getPost('make'),
-            'model'             => $this->request->getPost('model'),
-            'variant'           => $this->request->getPost('variant'),
-            'year'              => $this->request->getPost('year'),
-            'fuel_type'         => $this->request->getPost('fuel_type'),
-            'image_url'         => $this->request->getPost('image_url'),
-            'brochure_url'      => $this->request->getPost('brochure_url'),
-            'suspension'        => $this->request->getPost('suspension'),
-            'brakes'            => $this->request->getPost('brakes'),
-            'safety_features'   => $this->request->getPost('safety_features'),
-            'infotainment'      => $this->request->getPost('infotainment'),
-            'comfort_features'  => $this->request->getPost('comfort_features'),
+            'make' => $this->request->getPost('make'),
+            'model' => $this->request->getPost('model'),
+            'variant' => $this->request->getPost('variant'),
+            'year' => $this->request->getPost('year'),
+            'fuel_type' => $this->request->getPost('fuel_type'),
+            'image_url' => $this->request->getPost('image_url'),
+            'brochure_url' => $this->request->getPost('brochure_url'),
+            'suspension' => $this->request->getPost('suspension'),
+            'brakes' => $this->request->getPost('brakes'),
+            'safety_features' => $this->request->getPost('safety_features'),
+            'infotainment' => $this->request->getPost('infotainment'),
+            'comfort_features' => $this->request->getPost('comfort_features'),
             'interior_features' => $this->request->getPost('interior_features'),
             'exterior_features' => $this->request->getPost('exterior_features'),
-            'color_options'     => $this->request->getPost('color_options'),
-            'warranty'          => $this->request->getPost('warranty'),
+            'color_options' => $this->request->getPost('color_options'),
+            'warranty' => $this->request->getPost('warranty'),
         ]);
 
         $pricing = $this->pricingModel->where('vehicle_id', $vehicleId)->first();
         $pricingData = [
-            'vehicle_id'        => $vehicleId,
+            'vehicle_id' => $vehicleId,
             'ex_showroom_price' => $this->request->getPost('ex_showroom_price'),
-            'on_road_price'     => $this->request->getPost('on_road_price'),
-            'emi_available'     => $this->request->getPost('emi_available'),
-            'emi_amount'        => $this->request->getPost('emi_amount'),
-            'down_payment'      => $this->request->getPost('down_payment'),
-            'insurance_cost'    => $this->request->getPost('insurance_cost'),
-            'road_tax'          => $this->request->getPost('road_tax'),
-            'discount_offers'   => $this->request->getPost('discount_offers'),
-            'price_validity'    => $this->request->getPost('price_validity'),
-            'currency'          => $this->request->getPost('currency') ?: 'INR',
+            'on_road_price' => $this->request->getPost('on_road_price'),
+            'emi_available' => $this->request->getPost('emi_available'),
+            'emi_amount' => $this->request->getPost('emi_amount'),
+            'down_payment' => $this->request->getPost('down_payment'),
+            'insurance_cost' => $this->request->getPost('insurance_cost'),
+            'road_tax' => $this->request->getPost('road_tax'),
+            'discount_offers' => $this->request->getPost('discount_offers'),
+            'price_validity' => $this->request->getPost('price_validity'),
+            'currency' => $this->request->getPost('currency') ?: 'INR',
         ];
 
         if ($pricing) {

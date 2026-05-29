@@ -1,3 +1,4 @@
+
 <style>
     :root {
         --primary-blue: #1e3a8a;
@@ -103,113 +104,161 @@ $last_updated = date('F d, Y');
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How do I access my purchased courses?",
+      "name": "How do I view my owned vehicles?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Once your payment is confirmed, courses are instantly added to your Dashboard. You will also receive an email with direct access links."
+        "text": "Once you add a car to your garage, it will appear instantly in your Dashboard. You can also access detailed specs and pricing from the 'My Garage' section."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my payment information secure when buying a car?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. We use SSL encryption and trusted payment gateways. Your card details are never stored on our servers, ensuring PCI-DSS compliance."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I get warranty details with my purchase?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely. Each vehicle profile includes manufacturer warranty information and coverage terms. You can download the brochure for full details."
       }
     }
   ]
 }
 </script>
-
-
 <div class="container py-5">
-    <!-- Hero Section -->
-    <header class="policy-hero position-relative rounded-4 shadow-lg mb-5 overflow-hidden text-center text-white">
-        <div class="hero-bg-clean"></div>
-        <div class="container py-5 position-relative" style="z-index: 2;">
-            <span class="badge bg-white bg-opacity-20 text-dark px-3 py-2 rounded-pill mb-3">Help Center</span>
-            <h1 class="h1-seo mb-3">How can we help you?</h1>
-            <p class="policy-lead mx-auto">Find answers to common questions about our platform, courses, and
-                certifications.</p>
-        </div>
-    </header>
-
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <!-- Search Bar (UX Enhancement) -->
-            <div class="faq-search-wrapper mb-5">
-                <div class="position-relative">
-                    <i
-                        class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-primary fs-5"></i>
-                    <input type="text" class="form-control faq-search-input"
-                        placeholder="Search for answers (e.g. 'refunds', 'login')...">
-                </div>
-            </div>
-
-            <!-- Categories -->
-            <div class="d-flex flex-wrap gap-2 justify-content-center mb-5">
-                <span class="category-pill active">All Questions</span>
-                <span class="category-pill">Account</span>
-                <span class="category-pill">Payments</span>
-                <span class="category-pill">Courses</span>
-                <span class="category-pill">Security</span>
-            </div>
-
-            <!-- FAQ Accordion -->
-            <div class="accordion" id="faqAccordion">
-
-                <!-- Question 1 -->
-                <div class="accordion-item shadow-sm">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
-                            <i class="bi bi-question-circle me-3 text-primary"></i>
-                            How do I access my purchased courses?
-                        </button>
-                    </h2>
-                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Once your payment is confirmed, courses are instantly added to your
-                            <strong>Dashboard</strong>. You will also receive an email with direct access links. If you
-                            used OAuth2 (Google/GitHub) to sign up, ensure you are logged into that specific account.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Question 2 -->
-                <div class="accordion-item shadow-sm">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#faq2">
-                            <i class="bi bi-shield-check me-3 text-success"></i>
-                            Is my payment information secure?
-                        </button>
-                    </h2>
-                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Absolutely. We use <strong>SSL encryption</strong> and industry-standard payment gateways
-                            (Stripe/PayPal). We never store your credit card details on our servers in compliance with
-                            <strong>PCI-DSS standards</strong>.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Question 3 -->
-                <div class="accordion-item shadow-sm">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#faq3">
-                            <i class="bi bi-award me-3 text-warning"></i>
-                            Do I get a certificate after completion?
-                        </button>
-                    </h2>
-                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                        <div class="accordion-body">
-                            Yes! Upon maintaining a minimum score of 70% in all course quizzes, a <strong>verifiable
-                                digital certificate</strong> is automatically generated in your profile. You can share
-                            this directly to LinkedIn.
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Contact Support Callout -->
-            <div class="glass-effect text-center mt-5 p-4 border-dashed border-primary">
-                <p class="mb-0 text-muted">Still have questions? <a href="/contact" class="text-primary fw-bold">Chat
-                        with our support team</a></p>
-            </div>
-        </div>
+  <!-- Hero Section -->
+  <header class="policy-hero position-relative rounded-4 shadow-lg mb-5 overflow-hidden text-center text-white">
+    <div class="hero-bg-clean"></div>
+    <div class="container py-5 position-relative" style="z-index: 2;">
+      <span class="badge bg-white bg-opacity-20 text-dark px-3 py-2 rounded-pill mb-3">Help Center</span>
+      <h1 class="h1-seo mb-3">Automotive FAQs</h1>
+      <p class="policy-lead mx-auto">Find answers to common questions about vehicles, pricing, and ownership.</p>
     </div>
+  </header>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Search Bar -->
+      <div class="faq-search-wrapper mb-5">
+        <div class="position-relative">
+          <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-4 text-primary fs-5"></i>
+          <input type="text" class="form-control faq-search-input"
+                 placeholder="Search for answers (e.g. 'warranty', 'financing')...">
+        </div>
+      </div>
+
+      <!-- Category Tabs -->
+      <ul class="nav nav-pills justify-content-center mb-5" id="faqTabs" role="tablist">
+        <li class="nav-item"><button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button">All Questions</button></li>
+        <li class="nav-item"><button class="nav-link" id="ownership-tab" data-bs-toggle="tab" data-bs-target="#ownership" type="button">Ownership</button></li>
+        <li class="nav-item"><button class="nav-link" id="payments-tab" data-bs-toggle="tab" data-bs-target="#payments" type="button">Payments</button></li>
+        <li class="nav-item"><button class="nav-link" id="warranty-tab" data-bs-toggle="tab" data-bs-target="#warranty" type="button">Warranty</button></li>
+        <li class="nav-item"><button class="nav-link" id="safety-tab" data-bs-toggle="tab" data-bs-target="#safety" type="button">Safety</button></li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content" id="faqTabContent">
+
+        <!-- All Questions -->
+        <div class="tab-pane fade show active" id="all" role="tabpanel">
+          <div class="accordion" id="faqAccordionAll">
+            <div class="accordion-item shadow-sm">
+              <h2 class="accordion-header" id="headingAll1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAll1" aria-expanded="true" aria-controls="collapseAll1">
+                  <i class="bi bi-car-front-fill me-3 text-primary"></i> How do I view my owned vehicles?
+                </button>
+              </h2>
+              <div id="collapseAll1" class="accordion-collapse collapse show" aria-labelledby="headingAll1" data-bs-parent="#faqAccordionAll">
+                <div class="accordion-body">Once you add a car to your <strong>Garage</strong>, it appears instantly in your Dashboard.</div>
+              </div>
+            </div>
+            <div class="accordion-item shadow-sm">
+              <h2 class="accordion-header" id="headingAll2">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAll2" aria-controls="collapseAll2">
+                  <i class="bi bi-shield-check me-3 text-success"></i> Is my payment information secure?
+                </button>
+              </h2>
+              <div id="collapseAll2" class="accordion-collapse collapse" aria-labelledby="headingAll2" data-bs-parent="#faqAccordionAll">
+                <div class="accordion-body">We use SSL encryption and trusted gateways. Your card details are never stored.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ownership -->
+        <div class="tab-pane fade" id="ownership" role="tabpanel">
+          <div class="accordion" id="faqAccordionOwnership">
+            <div class="accordion-item shadow-sm">
+              <h2 class="accordion-header" id="headingOwn1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOwn1" aria-controls="collapseOwn1">
+                  <i class="bi bi-garage me-3 text-primary"></i> How do I add a car to my garage?
+                </button>
+              </h2>
+              <div id="collapseOwn1" class="accordion-collapse collapse show" aria-labelledby="headingOwn1" data-bs-parent="#faqAccordionOwnership">
+                <div class="accordion-body">Go to the car detail page and click “Add to Garage”.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payments -->
+        <div class="tab-pane fade" id="payments" role="tabpanel">
+          <div class="accordion" id="faqAccordionPayments">
+            <div class="accordion-item shadow-sm">
+              <h2 class="accordion-header" id="headingPay1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePay1" aria-controls="collapsePay1">
+                  <i class="bi bi-credit-card me-3 text-success"></i> What payment methods are accepted?
+                </button>
+              </h2>
+              <div id="collapsePay1" class="accordion-collapse collapse show" aria-labelledby="headingPay1" data-bs-parent="#faqAccordionPayments">
+                <div class="accordion-body">We accept credit/debit cards, UPI, and trusted gateways like Stripe and PayPal.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Warranty -->
+        <div class="tab-pane fade" id="warranty" role="tabpanel">
+          <div class="accordion" id="faqAccordionWarranty">
+            <div class="accordion-item shadow-sm">
+              <h2 class="accordion-header" id="headingWar1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWar1" aria-controls="collapseWar1">
+                  <i class="bi bi-award me-3 text-warning"></i> Do vehicles come with warranty?
+                </button>
+              </h2>
+              <div id="collapseWar1" class="accordion-collapse collapse show" aria-labelledby="headingWar1" data-bs-parent="#faqAccordionWarranty">
+                <div class="accordion-body">Yes, each vehicle profile includes manufacturer warranty details and coverage terms.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Safety -->
+        <div class="tab-pane fade" id="safety" role="tabpanel">
+          <div class="accordion" id="faqAccordionSafety">
+            <div class="accordion-item shadow-sm">
+              <h2 class="accordion-header" id="headingSafe1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSafe1" aria-controls="collapseSafe1">
+                  <i class="bi bi-shield-lock me-3 text-danger"></i> How safe are the vehicles?
+                </button>
+              </h2>
+              <div id="collapseSafe1" class="accordion-collapse collapse show" aria-labelledby="headingSafe1" data-bs-parent="#faqAccordionSafety">
+                <div class="accordion-body">Safety ratings (NCAP) and features like airbags, ABS, and sensors are listed in each car profile.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Contact Support Callout -->
+      <div class="glass-effect text-center mt-5 p-4 border-dashed border-primary">
+        <p class="mb-0 text-muted">Still have questions? <a href="<?= base_url() ?>/contact" class="text-primary fw-bold">Chat with our support team</a></p>
+      </div>
+    </div>
+  </div>
 </div>

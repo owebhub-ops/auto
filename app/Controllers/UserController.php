@@ -1,25 +1,28 @@
-<?php namespace App\Controllers;
+<?php
+namespace App\Controllers;
 
 use App\Models\UserModel;
-use App\Models\CourseModel;
-use App\Models\EnrollmentModel;
+use App\Models\VehicleOwnershipModel;
+use App\Models\WishlistModel;
+use App\Models\ComparisonModel;
 use CodeIgniter\Controller;
 
 class UserController extends Controller
 {
     protected $userModel;
-    protected $courseModel;
-    protected $enrollmentModel;
+    protected $ownershipModel;
+    protected $wishlistModel;
+    protected $comparisonModel;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
-        $this->courseModel = new CourseModel();
-        $this->enrollmentModel = new EnrollmentModel();  // ✅ UNCOMMENTED
-        
-        // Auth check - OAuth login
+        $this->ownershipModel = new VehicleOwnershipModel();
+        $this->wishlistModel = new WishlistModel();
+        $this->comparisonModel = new ComparisonModel();
+
         if (!session()->get('user_id')) {
-            return redirect()->to('/oauth/login');  // ✅ Fixed OAuth path
+            return redirect()->to('/oauth/login');
         }
     }
 
@@ -27,142 +30,91 @@ class UserController extends Controller
     {
         $userId = session()->get('user_id');
         $user = $this->userModel->find($userId);
-        
+
         if (!$user) {
             return redirect()->to('/')->with('error', 'User session invalid');
         }
 
-        // ✅ Use EnrollmentModel methods
-        $stats = $this->enrollmentModel->getUserStats($userId);
-        $recentCourses = $this->enrollmentModel->getRecentCourses($userId);
+        $stats = [
+            'total_vehicles' => $this->ownershipModel->countAllResults(),
+            'owned_vehicles' => $this->ownershipModel->where('user_id', $userId)->countAllResults(),
+            'wishlist_count' => $this->wishlistModel->where('user_id', $userId)->countAllResults(),
+            'comparison_count' => $this->comparisonModel->where('user_id', $userId)->countAllResults()
+        ];
+
+        $recentVehicles = $this->ownershipModel->getOwnedVehicles($userId);
 
         $data = [
             'page_title' => 'Dashboard',
             'user' => $user,
             'stats' => $stats,
-            'recent_courses' => $recentCourses
+            'recent_vehicles' => $recentVehicles
         ];
 
-        $content = view('pages/user/dashboard', $data);
         return view('templates/layout_inner_home', [
             'pageData' => [
                 'title' => 'Dashboard - ' . esc($user['name'] ?? session()->get('user_name')),
-                'description' => 'Your learning dashboard',
-                'keywords' => 'dashboard, my learning, progress'
+                'description' => 'Your automotive dashboard with stats and recent activity',
+                'keywords' => 'dashboard, cars, vehicles, garage, wishlist'
             ],
-            'content' => $content
+            'content' => view('pages/user/mydashboard', $data)
         ]);
     }
 
+    /**
+     * Profile page
+     */
     public function profile()
     {
         $userId = session()->get('user_id');
         $user = $this->userModel->find($userId);
-        
+
         if (!$user) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
         }
 
-        // ✅ Use EnrollmentModel
         $data = [
             'page_title' => 'Profile',
             'user' => $user,
-            'enrollments_count' => $this->enrollmentModel->where('user_id', $userId)->countAllResults(),
-            'stats' => $this->enrollmentModel->getUserStats($userId)
+            'owned_vehicles' => $this->ownershipModel->where('user_id', $userId)->countAllResults(),
+            'wishlist_count' => $this->wishlistModel->where('user_id', $userId)->countAllResults(),
+            'comparison_count' => $this->comparisonModel->where('user_id', $userId)->countAllResults()
         ];
 
-        $content = view('pages/user/profile', $data);
         return view('templates/layout_inner_home', [
             'pageData' => [
                 'title' => 'Profile - ' . esc($user['name'] ?? session()->get('user_name')),
-                'description' => 'Your profile and learning statistics',
-                'keywords' => 'profile, account, statistics'
+                'description' => 'Your profile and automotive statistics',
+                'keywords' => 'profile, account, cars, wishlist, comparisons'
             ],
-            'content' => $content
+            'content' => view('pages/user/profile', $data)
         ]);
     }
-
-    public function myCourses()
-    {
-        $userId = session()->get('user_id');
-        
-        // ✅ Use EnrollmentModel method
-        $courses = $this->enrollmentModel->getUserCourses($userId);
-        $stats = $this->enrollmentModel->getUserStats($userId);
-
-        $data = [
-            'page_title' => 'My Courses',
-            'courses' => $courses,
-            'stats' => $stats,
-            'empty_state' => empty($courses)
-        ];
-
-        $content = view('pages/user/my_courses', $data);
-        return view('templates/layout_inner_home', [
-            'pageData' => [
-                'title' => 'My Courses',
-                'description' => 'Your enrolled courses and progress',
-                'keywords' => 'my courses, enrolled courses, learning progress'
-            ],
-            'content' => $content
-        ]);
-    }
-
-    public function myQuizzes()
-    {
-        $userId = session()->get('user_id');
-        // TODO: QuizModel integration
-        $data = [
-            'page_title' => 'My Quizzes',
-            'quizzes' => [],  // QuizModel::getUserQuizzes($userId)
-            'stats' => $this->enrollmentModel->getUserStats($userId)
-        ];
-
-        $content = view('user/my_quizzes', $data);
-        return view('templates/layout_inner_home', [
-            'pageData' => [
-                'title' => 'My Quizzes',
-                'description' => 'Your quiz results and scores',
-                'keywords' => 'quizzes, results, scores'
-            ],
-            'content' => $content
-        ]);
-    }
-
-    /**
-     * Enroll in course (AJAX endpoint)
-     */
-    public function enroll($courseId)
+    public function favorites()
     {
         $userId = session()->get('user_id');
         if (!$userId) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Unauthorized']);
+            return redirect()->to('/oauth/login');
         }
 
-        $enrollmentId = $this->enrollmentModel->enrollUser($userId, $courseId);
-        if ($enrollmentId) {
-            return $this->response->setJSON([
-                'success' => true, 
-                'message' => 'Enrolled successfully',
-                'enrollment_id' => $enrollmentId
-            ]);
-        }
+        // Fetch favorites from a model
+        $favorites = $this->wishlistModel->where('user_id', $userId)
+            ->join('vehicles', 'vehicles.vehicle_id = wishlist.vehicle_id')
+            ->findAll();
 
-        return $this->response->setJSON(['success' => false, 'message' => 'Enrollment failed']);
+        $data = [
+            'page_title' => 'My Favorites',
+            'favorites' => $favorites
+        ];
+
+        return view('templates/layout_inner_home', [
+            'pageData' => [
+                'title' => 'Favorites - ' . esc(session()->get('user_name')),
+                'description' => 'Your favorite cars list',
+                'keywords' => 'favorites, wishlist, cars'
+            ],
+            'content' => view('pages/user/favorites', $data)
+        ]);
     }
 
-    /**
-     * Update course progress (AJAX)
-     */
-    public function updateProgress($courseId)
-    {
-        $userId = session()->get('user_id');
-        $progress = $this->request->getPost('progress');
-
-        if (!$this->enrollmentModel->updateProgress($userId, $courseId, $progress)) {
-            return $this->response->setJSON(['success' => false, 'message' => 'Update failed']);
-        }
-
-        return $this->response->setJSON(['success' => true, 'progress' => $progress]);
-    }
 }

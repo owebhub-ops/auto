@@ -210,7 +210,7 @@
 
                                 <!-- Quick Actions Overlay -->
                                 <div class="image-overlay">
-                                    <a href="<?= site_url('cars/' . $car['vehicle_id']) ?>"
+                                    <a href="<?= site_url('cars/' . $car['slug']) ?>"
                                         class="btn btn-light btn-sm rounded-pill shadow">
                                         <i class="bi bi-eye"></i> Quick View
                                     </a>
@@ -261,7 +261,7 @@
 
                                 <!-- Primary Action -->
                                 <div class="car-actions">
-                                    <a href="<?= site_url('cars/' . $car['vehicle_id']) ?>"
+                                    <a href="<?= site_url('cars/' . $car['slug']) ?>"
                                         class="btn btn-primary w-100 fw-bold rounded-pill shadow-lg mb-2 transition-lift">
                                         <i class="bi bi-arrow-right-circle me-2"></i>
                                         Explore Details
@@ -716,7 +716,7 @@ class="img-fluid w-100 h-100 object-fit-cover transition-scale"> */ ?>
                 </div>
 
                 <div class="image-overlay">
-    <a href="<?= base_url('cars') ?>/${car.vehicle_id}" 
+    <a href="<?= base_url('cars') ?>/${car.slug}" 
        class="btn btn-light btn-sm rounded-pill shadow">
         👁 Quick View
     </a>
@@ -765,7 +765,7 @@ class="img-fluid w-100 h-100 object-fit-cover transition-scale"> */ ?>
                 </div>
 
                 <div class="car-actions">
-                    <a href="<?= base_url('cars') ?>/${car.vehicle_id}"
+                    <a href="<?= base_url('cars') ?>/${car.slug}"
    class="btn btn-primary w-100 fw-bold rounded-pill shadow-lg mb-2">
                         Explore Details
                     </a>
