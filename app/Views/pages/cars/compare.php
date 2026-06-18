@@ -749,78 +749,108 @@
                                         <td><?= number_format(esc($car['boot_space_liters'])) ?> L</td>
                                     <?php endforeach; ?>
                                 </tr>
-                                <tr class="table-active">
-                                    <th><i class="bi bi-currency-rupee text-success me-2"></i> Ex-Showroom Price</th>
-                                    <?php foreach ($vehicles as $car): ?>
-                                        <td class="price-highlight">
-                                            <?= esc($car['pricing']['currency'] ?? '₹') ?>
-                                            <?= number_format($car['pricing']['ex_showroom_price'] ?? 0, 2) ?>
-                                        </td>
-                                    <?php endforeach; ?>
-                                </tr>
-                                <tr>
-                                    <th><i class="bi bi-cash-stack text-primary me-2"></i> On-Road Price</th>
-                                    <?php foreach ($vehicles as $car): ?>
-                                        <td>
-                                            <strong><?= esc($car['pricing']['currency'] ?? '₹') ?>
-                                                <?= number_format($car['pricing']['on_road_price'] ?? 0, 2) ?></strong>
-                                        </td>
-                                    <?php endforeach; ?>
-                                </tr>
-                                <tr>
-                                    <th><i class="bi bi-credit-card-2-front text-primary me-2"></i> EMI Available</th>
-                                    <?php foreach ($vehicles as $car): ?>
-                                        <td>
-                                            <?php if (!empty($car['pricing']['emi_available'])): ?>
-                                                <span class="badge-success-custom">
-                                                    <i class="bi bi-check-circle"></i> Yes
-                                                </span>
-                                            <?php else: ?>
-                                                <span class="badge-danger-custom">
-                                                    <i class="bi bi-x-circle"></i> No
-                                                </span>
-                                            <?php endif; ?>
-                                        </td>
-                                    <?php endforeach; ?>
-                                </tr>
-                                <?php if (!empty($car['pricing']['emi_amount'])): ?>
-                                    <tr>
-                                        <th><i class="bi bi-wallet2 text-primary me-2"></i> EMI Amount</th>
-                                        <?php foreach ($vehicles as $car): ?>
-                                            <td>
-                                                <?= esc($car['pricing']['currency'] ?? '₹') ?>
-                                                <?= number_format($car['pricing']['emi_amount'] ?? 0, 2) ?>/month
-                                            </td>
-                                        <?php endforeach; ?>
-                                    </tr>
-                                <?php endif; ?>
-                                <tr>
-                                    <th><i class="bi bi-shield-check text-primary me-2"></i> Insurance</th>
-                                    <?php foreach ($vehicles as $car): ?>
-                                        <td>
-                                            <?= esc($car['pricing']['currency'] ?? '₹') ?>
-                                            <?= number_format($car['pricing']['insurance_cost'] ?? 0, 2) ?>
-                                        </td>
-                                    <?php endforeach; ?>
-                                </tr>
-                                <tr>
-                                    <th><i class="bi bi-gift-fill text-primary me-2"></i> Offers & Discounts</th>
-                                    <?php foreach ($vehicles as $car): ?>
-                                        <td>
-                                            <?php
-                                            $offers = $car['pricing']['discount_offers'] ?? null;
-                                            if (!empty($offers) && is_array($offers)): ?>
-                                                <ul class="offers-list">
-                                                    <?php foreach ($offers as $offer): ?>
-                                                        <li><i class="bi bi-check2-circle"></i> <?= esc($offer) ?></li>
-                                                    <?php endforeach; ?>
-                                                </ul>
-                                            <?php else: ?>
-                                                <span class="text-muted">—</span>
-                                            <?php endif; ?>
-                                        </td>
-                                    <?php endforeach; ?>
-                                </tr>
+                                <!-- Ex-Showroom Price Row -->
+<tr class="table-active">
+    <th><i class="bi bi-currency-rupee text-success me-2"></i> Ex-Showroom Price</th>
+    <?php foreach ($vehicles as $car): ?>
+        <td class="price-highlight">
+            <?= esc($car['currency'] ?? '₹') ?> 
+            <?= number_format(floatval($car['ex_showroom_price'] ?? 0), 2) ?>
+        </td>
+    <?php endforeach; ?>
+</tr>
+
+<!-- On-Road Price Row -->
+<tr>
+    <th><i class="bi bi-cash-stack text-primary me-2"></i> On-Road Price</th>
+    <?php foreach ($vehicles as $car): ?>
+        <td>
+            <strong><?= esc($car['currency'] ?? '₹') ?> 
+            <?= number_format(floatval($car['on_road_price'] ?? 0), 2) ?></strong>
+        </td>
+    <?php endforeach; ?>
+</tr>
+
+<!-- EMI Available Row -->
+<tr>
+    <th><i class="bi bi-credit-card-2-front text-primary me-2"></i> EMI Available</th>
+    <?php foreach ($vehicles as $car): ?>
+        <td>
+            <?php if (!empty($car['emi_available']) && $car['emi_available'] == 1): ?>
+                <span class="badge-success-custom">
+                    <i class="bi bi-check-circle"></i> Yes
+                </span>
+            <?php else: ?>
+                <span class="badge-danger-custom">
+                    <i class="bi bi-x-circle"></i> No
+                </span>
+            <?php endif; ?>
+        </td>
+    <?php endforeach; ?>
+</tr>
+
+<!-- EMI Amount Row (only show if any vehicle has EMI) -->
+<?php $hasEmi = false; foreach ($vehicles as $car): if (!empty($car['emi_amount']) && $car['emi_amount'] > 0) $hasEmi = true; endforeach; ?>
+<?php if ($hasEmi): ?>
+<tr>
+    <th><i class="bi bi-wallet2 text-primary me-2"></i> EMI Amount</th>
+    <?php foreach ($vehicles as $car): ?>
+        <td>
+            <?php if (!empty($car['emi_amount']) && $car['emi_amount'] > 0): ?>
+                <?= esc($car['currency'] ?? '₹') ?> 
+                <?= number_format(floatval($car['emi_amount'] ?? 0), 2) ?>/month
+            <?php else: ?>
+                <span class="text-muted">—</span>
+            <?php endif; ?>
+        </td>
+    <?php endforeach; ?>
+</tr>
+<?php endif; ?>
+
+<!-- Insurance Row -->
+<tr>
+    <th><i class="bi bi-shield-check text-primary me-2"></i> Insurance</th>
+    <?php foreach ($vehicles as $car): ?>
+        <td>
+            <?php if (!empty($car['insurance_cost']) && $car['insurance_cost'] > 0): ?>
+                <?= esc($car['currency'] ?? '₹') ?> 
+                <?= number_format(floatval($car['insurance_cost'] ?? 0), 2) ?>
+            <?php else: ?>
+                <span class="text-muted">—</span>
+            <?php endif; ?>
+        </td>
+    <?php endforeach; ?>
+</tr>
+
+<!-- Offers & Discounts Row -->
+<tr>
+    <th><i class="bi bi-gift-fill text-primary me-2"></i> Offers & Discounts</th>
+    <?php foreach ($vehicles as $car): ?>
+        <td>
+            <?php
+            $offers = $car['discount_offers'] ?? null;
+            if (!empty($offers)) {
+                // If offers is a JSON string, decode it
+                if (is_string($offers)) {
+                    $offers = json_decode($offers, true);
+                }
+                // If offers is an array and not empty
+                if (is_array($offers) && !empty($offers)): ?>
+                    <ul class="offers-list">
+                        <?php foreach ($offers as $offer): ?>
+                            <li><i class="bi bi-check2-circle"></i> <?= esc($offer) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <span class="text-muted">—</span>
+                <?php endif;
+            } else {
+                echo '<span class="text-muted">—</span>';
+            }
+            ?>
+        </td>
+    <?php endforeach; ?>
+</tr>
                             </tbody>
                         </table>
                     </div>

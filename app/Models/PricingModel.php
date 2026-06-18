@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class PricingModel extends Model
 {
-    protected $table = 'Pricing';
+    protected $table = 'pricing';
     protected $primaryKey = 'price_id';
     protected $useAutoIncrement = true;
     protected $returnType = 'array';

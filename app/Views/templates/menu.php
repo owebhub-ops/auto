@@ -41,6 +41,8 @@
                         <i class="bi bi-grid-3x3-gap-fill me-1"></i> Categories
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark border-0 shadow-lg mt-2 rounded-4 py-2" aria-labelledby="carCategoriesDropdown">
+                    <li><a class="dropdown-item py-2" href="<?= base_url('ev') ?>"><i class="bi bi-flower2 me-2"></i>Electric Vehicles</a></li>
+
                         <li><a class="dropdown-item py-2" href="<?= base_url('cars/suv') ?>"><i class="bi bi-truck me-2"></i>SUVs & Crossovers</a></li>
                         <li><a class="dropdown-item py-2" href="<?= base_url('cars/sedan') ?>"><i class="bi bi-car-front me-2"></i>Sedans</a></li>
                         <li><a class="dropdown-item py-2" href="<?= base_url('cars/electric') ?>"><i class="bi bi-lightning-charge me-2"></i>Electric Vehicles</a></li>
@@ -49,15 +51,15 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link fw-semibold px-3" href="<?= base_url('cars/compare') ?>">
+                    <a class="nav-link fw-semibold px-3" href="<?= base_url('cars-compareHome') ?>">
                         <i class="bi bi-shuffle me-1"></i> Compare Models
                     </a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link fw-semibold px-3" href="<?= base_url('reviews') ?>">
                         <i class="bi bi-star-fill me-1"></i> Expert Reviews
                     </a>
-                </li>
+                </li> -->
             </ul>
 
             <!-- Right section: Google OAuth & user avatar (dynamic) -->

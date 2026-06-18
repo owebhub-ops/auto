@@ -59,6 +59,11 @@ $routes->get('cars/compareHome', 'CarsController::compareHome');
 $routes->get('cars/compare', 'CarsController::compare');
 $routes->get('cars/compare/(:any)', 'CarsController::compare/$1'); // For URL segment style
 $routes->get('cars/search', 'CarsController::search'); 
+
+$routes->get('cars-compareHome', 'CarsController::compareHome');
+$routes->get('cars-compare', 'CarsController::compare');
+$routes->get('cars-compare/(:any)', 'CarsController::compare/$1'); // For URL segment style
+$routes->get('cars-search', 'CarsController::search'); 
 // Cars listing and detail
 $routes->get('cars', 'CarsController::index');
 $routes->get('cars/sort/(:segment)', 'CarsController::index/$1');
@@ -66,11 +71,12 @@ $routes->get('cars/category/(:segment)', 'CarsController::index/null/$1');
 $routes->get('cars/detail/(:num)', 'CarsController::detail/$1');
 $routes->get('cars/detail/(:segment)', 'CarsController::details/$1');
 
-$routes->get('cars/(:num)', 'CarsController::detail/$1');
-$routes->get('cars/(:segment)', 'CarsController::details/$1');
+$routes->get('car/(:num)', 'CarsController::detail/$1');
+$routes->get('car/(:segment)', 'CarsController::details/$1');
 // Load More endpoint for AJAX
-$routes->get('cars/loadMore', 'CarsController::loadMore');
-
+// Add this at the top of your routes file
+$routes->get('ajax/loadMore', 'Ajax::loadMore');
+$routes->post('ajax/loadMore', 'Ajax::loadMore');
 
 
 
@@ -80,6 +86,13 @@ $routes->get('cars/features/(:segment)', 'FeaturesController::index/$1');
 $routes->get('cars/features/detail/(:num)', 'FeaturesController::detail/$1');
 $routes->get('cars/features/search', 'FeaturesController::search');
 $routes->get('cars/features/loadMore', 'FeaturesController::loadMore');
+
+// EV Routes
+$routes->get('ev', 'EVController::index');
+$routes->get('ev/detail/(:segment)', 'EVController::detail/$1');
+$routes->get('ev/compare', 'EVController::compare');
+$routes->get('ev/compare/(:any)', 'EVController::compare/$1');
+$routes->get('ev/search', 'EVController::search');
 
 
 // Static Pages Routes (SEO-friendly)
